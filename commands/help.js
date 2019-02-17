@@ -33,7 +33,7 @@ module.exports.run = async (bot, message, args) => {
         .setThumbnail(bot.user.displayAvatarURL)
         .setTimestamp()
         .setDescription(`These are the avaliable commands for the TestBOT!\nThe bot prefix is: ${prefix}`)
-        .addField(`Commands:`, "``cat`` ``dog`` ``meme`` ``help`` ``serverinfo`` ``userinfo``")
+        .addField("Commands", `\`bot.commands.map(cmd => cmd.help.name).join("` `")\``)
         .setFooter("Test Bot 2k18", bot.user.displayAvatarURL)
         message.channel.send(embed).then(m => m.delete(10000));
         message.author.send(Sembed)

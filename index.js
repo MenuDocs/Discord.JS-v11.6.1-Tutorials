@@ -1,7 +1,6 @@
 const Discord = require("discord.js");
 const botconfig = require("./botconfig.json");
 const colours = require("./colours.json");
-const superagent = require("superagent")
 
 const bot = new Discord.Client({disableEveryone: true});
 
@@ -27,6 +26,13 @@ fs.readdir("./commands/", (err, files) => {
             bot.aliases.set(alias, pull.config.name)
         });
     });
+});
+
+//console chatter
+let y = process.openStdin()
+y.addListener("data", res => {
+    let x = res.toString().trim().split(/ +/g)
+    bot.channels.get("555039958121971736").send(x.join(" "));
 });
 
 

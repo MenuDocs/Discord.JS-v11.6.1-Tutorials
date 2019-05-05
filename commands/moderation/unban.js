@@ -25,7 +25,7 @@ module.exports = {
     if(!message.guild.me.hasPermission(["BAN_MEMBERS", "ADMINISTRATOR"])) return message.channel.send("I dont have permission to perform this command!")|
     message.delete()
     try {
-        message.guild.unban(bannedMember, {reason: reason})
+        message.guild.unban(bannedMember, reason)
         message.channel.send(`${bannedMember.tag} has been unbanned from the guild!`)
     } catch(e) {
         console.log(e.message)

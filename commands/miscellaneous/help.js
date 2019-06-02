@@ -1,46 +1,54 @@
-const { RichEmbed } = require("discord.js")
+const { RichEmbed } = require("discord.js");
 const { prefix } = require("../../botconfig.json");
-const { cyan } = require("../../colours.json");
+const { readdirSync } = require("fs")
+const { stripIndents } = require("common-tags")
+const { cyan } = require("../../colours.json")
 
 module.exports = {
     config: {
         name: "help",
         aliases: ["h", "halp", "commands"],
-        usage: "!usage",
+        usage: "(command)",
         category: "miscellaneous",
-        description: "",
+        description: "Displays all commands that the bot has.",
         accessableby: "Members"
     },
     run: async (bot, message, args) => {
-    let arr = [];
-    let types = ["Moderation", "Miscellaneous"];
-    let embed = new RichEmbed()
+        const embed = new RichEmbed()
+            .setColor(cyan)
+            .setAuthor(`${message.guild.me.displayName} Help`, message.guild.iconURL)
+            .setThumbnail(bot.user.displayAvatarURL)
 
-    if (!args[0]) {
-        for(let i = 0; i < types.length; i++) {
-            arr.push(bot.commands.filter(c => c.config.category == types[i].toLowerCase()).map(c => `\`${c.config.name}\``).join(" "));
-            try {
-                embed.addField(types[i], arr[i]);
-            } catch (e) {
-                embed.addBlankField();
-            }
-        }
+        if(!args[0]) {
+            const categories = readdirSync("./commands/")
 
-        embed.setColor(cyan)
-        .setAuthor(`${message.guild.me.displayName} Help`, message.guild.iconURL)
-        .setThumbnail(bot.user.displayAvatarURL)
-        .setTimestamp()
-        .setDescription(`These are the avaliable commands for the TestBOT!\nThe bot prefix is: **${prefix}**`)
-        .setFooter("Test Bot 2k19", bot.user.displayAvatarURL)
-        message.channel.send(embed)
-    } else {
-        let command = bot.commands.get(args[0].toLowerCase()) ?  bot.commands.get(args[0].toLowerCase()).config : bot.commands.get(bot.aliases.get(args[0].toLowerCase())).config;
-            
-        embed.setColor(cyan)
-        .setAuthor(`${message.guild.me.displayName} Help`, message.guild.iconURL)
-        .setThumbnail(bot.user.displayAvatarURL)
-        .setDescription(`The bot prefix is: ${prefix}\n\n**Command:** ${command.name}\n**Description:** ${command.description || "No Description"}\n**Usage:** ${command.usage || "No Usage"}\n**Accessable by:** ${command.accessableby || "Members"}\n**Aliases:** ${command.aliases ? command.aliases.join(", ") : "None"}`)
-        message.channel.send(embed);
+            embed.setDescription(`These are the avaliable commands for ${message.guild.me.displayName}\nThe bot prefix is: **${prefix}**`)
+            embed.setFooter(`© ${message.guild.me.displayName} | Total Commands: ${bot.commands.size}`, bot.user.displayAvatarURL);
+
+            categories.forEach(category => {
+                const dir = bot.commands.filter(c => c.config.category === category)
+                const capitalise = category.slice(0, 1).toUpperCase() + category.slice(1)
+                try {
+                    embed.addField(`❯ ${capitalise} [${dir.size}]:`, dir.map(c => `\`${c.config.name}\``).join(" "))
+                } catch(e) {
+                    console.log(e)
+                }
+            })
+
+            return message.channel.send(embed)
+        } else {
+            let command = bot.commands.get(bot.aliases.get(args[0].toLowerCase()) || args[0].toLowerCase())
+            if(!command) return message.channel.send(embed.setTitle("Invalid Command.").setDescription(`Do \`${prefix}help\` for the list of the commands.`))
+            command = command.config
+
+            embed.setDescription(stripIndents`The bot's prefix is: \`${prefix}\`\n
+            **Command:** ${command.name.slice(0, 1).toUpperCase() + command.name.slice(1)}
+            **Description:** ${command.description || "No Description provided."}
+            **Usage:** ${command.usage ? `\`${prefix}${command.name} ${command.usage}\`` : "No Usage"}
+            **Accessible by:** ${command.accessableby || "Members"}
+            **Aliases:** ${command.aliases ? command.aliases.join(", ") : "None."}`)
+
+            return message.channel.send(embed)
         }
     }
 }

@@ -13,14 +13,14 @@ module.exports = {
     run: async (bot, message, args) => {
     let msg = await message.channel.send("Generating...")
 
-    fetch(`https://api-to.get-a.life/meme`)
+    fetch("https://apis.duncte123.me/meme")
     .then(res => res.json()).then(body => {
         if(!body) return message.reply("whoops! I've broke, try again!")
 
         let mEmbed = new RichEmbed()
         .setColor(cyan)
         .setAuthor(`${bot.user.username} MEMES!`, message.guild.iconURL)
-        .setImage(body.url)
+        .setImage(body.image)
         .setTimestamp()
         .setFooter(bot.user.username.toUpperCase(), bot.user.displayAvatarURL)
 

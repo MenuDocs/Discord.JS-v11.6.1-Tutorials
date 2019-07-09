@@ -20,7 +20,7 @@ module.exports = {
         let mEmbed = new RichEmbed()
         .setColor(cyan)
         .setAuthor(`${bot.user.username} MEMES!`, message.guild.iconURL)
-        .setImage(body.image)
+        .setImage(body.data.image)
         .setTimestamp()
         .setFooter(bot.user.username.toUpperCase(), bot.user.displayAvatarURL)
 

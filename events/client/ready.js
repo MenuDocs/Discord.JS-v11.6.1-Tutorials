@@ -1,17 +1,15 @@
-module.exports = async bot => {
-     console.log(`${bot.user.username} is online`)
-    // bot.user.setActivity("Hello", {type: "STREAMING", url:"https://twitch.tv/Strandable"});
+const { PlayerManager } = require("discord.js-lavalink");
+const { nodes } = require("../../botconfig.json")
 
-    let statuses = [
-        `${bot.guilds.size} servers!`,
-        "!help",
-        `over ${bot.users.size} users!`
-    ]
+module.exports = bot => {
+    console.log(`${bot.user.username} is online`);
 
-    setInterval(function() {
-        let status = statuses[Math.floor(Math.random() * statuses.length)];
-        bot.user.setActivity(status, {type: "WATCHING"});
+    // global.lavalink = new PlayerManager(bot, nodes, {
+    //     user: bot.user.id,
+    //     shards: 0
+    // });
 
-    }, 5000)
+    let activities = [ `${bot.guilds.size} servers!`, `${bot.channels.size} channels!`, `${bot.users.size} users!` ], i = 0;
+    setInterval(() => bot.user.setActivity(`${bot.prefix}help | ${activities[i++ % activities.length]}`, { type: "WATCHING" }), 15000)
 
-}
+};

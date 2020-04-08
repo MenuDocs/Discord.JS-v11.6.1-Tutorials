@@ -31,7 +31,7 @@ Once you've selected a branch, you can browse through the files available:
 - [Website](https://menudocs.org)
 - [Discord Server](https://discord.gg/MgVaazZ)
 - [GitHub](https://github.com/MenuDocs)
-- [Twiter](https://twitter.com/MenuDocs)
+- [Twitter](https://twitter.com/MenuDocs)
 - [Twitch](https://twitch.tv/MenuDocs)
 
 ## Resources
